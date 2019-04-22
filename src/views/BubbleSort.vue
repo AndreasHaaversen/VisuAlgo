@@ -1,5 +1,5 @@
 <template>
-    
+    <p>This is a place holder</p>
 </template>
 
 <script>
