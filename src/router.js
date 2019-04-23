@@ -3,7 +3,8 @@ import Router from "vue-router";
 import Home from "./views/Home.vue";
 import BubbleSort from "./views/BubbleSort.vue";
 import QuickSort from "./views/QuickSort.vue";
-import InsertionSort from "./views/InsertionSort.vue"
+import InsertionSort from "./views/InsertionSort.vue";
+import MergeSort from "./views/MergeSort.vue"
 
 Vue.use(Router);
 
@@ -28,8 +29,13 @@ export default new Router({
     },
     {
       path: "/insertionsort",
-      name: 'InsertionSort',
+      name: "InsertionSort",
       component: InsertionSort
+    },
+    {
+      path: "/mergesort",
+      name: "MergeSort",
+      component: MergeSort
     }
   ]
 });

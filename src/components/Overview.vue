@@ -38,6 +38,18 @@
             <v-btn flat color="blue" @click="showQuick()">Visualize</v-btn>
           </v-card-actions>
         </v-card>
+        <v-card>
+          <v-card-title primary-title>
+            <div>
+              <h2>Merge Sort</h2>
+              <div>One of the fastest sorting algorithems there is.</div>
+              <div>Time complexity: O(nlog(n))</div>
+            </div>
+          </v-card-title>
+          <v-card-actions class="justify-center">
+            <v-btn flat color="blue" @click="showMerge()">Visualize</v-btn>
+          </v-card-actions>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -56,6 +68,10 @@ export default {
 
     showQuick() {
       this.$router.push("/quicksort");
+    },
+
+    showMerge() {
+      this.$router.push("/mergesort")
     }
   }
 };
