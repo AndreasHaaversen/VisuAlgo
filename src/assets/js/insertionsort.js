@@ -2,8 +2,10 @@ let p5;
 
 let values;
 
-let i = 0;
-let j = 0;
+let i = 1;
+let j = 1;
+let midsorting = false;
+
 let z = 0;
 
 let w = 10;
@@ -19,32 +21,37 @@ export function main(_p5) {
       values[i] = p5.random(p5.height);
     }
 
-    p5.frameRate(20);
+    p5.frameRate(30);
   };
 
   p5.draw = function() {
     p5.background(0);
 
-    if (i < values.length) {
-      j++;
-      if (j >= values.length - i - 1) {
-        j = 0;
-        i++;
+    for (let i = 0; i < values.length; i++) {
+      p5.stroke(200);
+      if (i === j) {
+        p5.fill(255, 0, 0);
+      } else {
+        p5.fill(255);
       }
-      var a = values[j];
-      var b = values[j + 1];
-      if (a > b) {
-        swap(values, j, j + 1);
+      p5.rect(i * w, p5.height - values[i], w, values[i]);
+    }
+
+    if (i < values.length) {
+      if (!midsorting) {
+        j = i;
       }
 
-      for (let i = 0; i < values.length; i++) {
-        p5.stroke(200);
-        if (i - 1 === j) {
-          p5.fill(255, 0, 0);
-        } else {
-          p5.fill(255);
-        }
-        p5.rect(i * w, p5.height - values[i], w, values[i]);
+      if (values[j] < values[j - 1] && j >= 0) {
+        midsorting = true;
+        swap(values, j - 1, j);
+        j--;
+      } else {
+        midsorting = false;
+      }
+
+      if (!midsorting) {
+        i++;
       }
     } else {
       for (let i = 0; i < values.length; i++) {
@@ -57,7 +64,7 @@ export function main(_p5) {
         p5.rect(i * w, p5.height - values[i], w, values[i]);
       }
       z++;
-      if (z === values.length) {
+      if (z - 1 === values.length) {
         p5.noLoop();
       }
     }
