@@ -3,8 +3,12 @@ let p5;
 export function main(_p5) {
   p5 = _p5;
 
+  p5.disableFriendlyErrors = true; // disables FES
+
   let values;
   let w = 5;
+
+  let z = 0;
 
   let states = [];
   let sortingStateHistory = [];
@@ -20,8 +24,8 @@ export function main(_p5) {
       sortingState[i] = 0;
     }
     sortingStateHistory.push(sortingState.slice());
-    mergeSort(values, 0, values.length - 1);
-    p5.frameRate(60);
+    mergeSort(values, 0, values.length);
+    p5.frameRate(25);
   };
 
   var stateIndex = 0;
@@ -29,16 +33,29 @@ export function main(_p5) {
   p5.draw = function() {
     p5.background(0);
 
-    for (let i = 0; i < states[stateIndex].length; i++) {
-      p5.stroke(200);
-      sortingStateHistory[stateIndex][i] == 1
-        ? p5.fill(255, 0, 0)
-        : p5.fill(255);
-      p5.rect(i * w, p5.height - states[stateIndex][i], w, p5.height);
-    }
-    stateIndex++;
-    if (stateIndex > states.length - 1) {
-      p5.noLoop();
+    if (stateIndex < states.length - 1) {
+      for (let i = 0; i < states[stateIndex].length; i++) {
+        p5.stroke(200);
+        sortingStateHistory[stateIndex][i] == 1
+          ? p5.fill(255, 0, 0)
+          : p5.fill(255);
+        p5.rect(i * w, p5.height - states[stateIndex][i], w, p5.height);
+      }
+      stateIndex++;
+    } else {
+      for (let i = 0; i < states[stateIndex].length; i++) {
+        p5.stroke(200);
+        if (i < z) {
+          p5.fill(0, 255, 0);
+        } else {
+          p5.fill(255);
+        }
+        p5.rect(i * w, p5.height - states[stateIndex][i], w, p5.height);
+      }
+      z++;
+      if (z - 1 === values.length) {
+        p5.noLoop();
+      }
     }
   };
 
@@ -55,7 +72,7 @@ export function main(_p5) {
     // of both arrays to merge
     while (start <= mid && start2 <= end) {
       states.push(arr.slice());
-      setState(start, end);
+      setState(start, end + 1);
       // If element 1 is in right place
       if (arr[start] <= arr[start2]) {
         start++;
@@ -92,7 +109,7 @@ export function main(_p5) {
       mergeSort(arr, m + 1, r);
 
       merge(arr, l, m, r);
-      unsetState(l, r);
+      unsetState(l, r + 1);
     }
   }
 
