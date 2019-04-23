@@ -7,18 +7,21 @@ export function main(_p5) {
   let w = 5;
 
   let states = [];
+  let sortingStateHistory = [];
 
   p5.setup = function() {
     var canvas = p5.createCanvas(800, 600);
-    p5.colorMode(p5.HSB, p5.height);
     canvas.parent("p5Canvas");
 
     values = new Array(Math.floor(p5.width / w));
+    let sortingState = new Array(Math.floor(p5.width / w));
     for (let i = 0; i < values.length; i++) {
       values[i] = p5.random(p5.height);
+      sortingState[i] = 0;
     }
+    sortingStateHistory.push(sortingState.slice());
     mergeSort(values, 0, values.length - 1);
-    p5.frameRate(1);
+    p5.frameRate(60);
   };
 
   var stateIndex = 0;
@@ -27,9 +30,10 @@ export function main(_p5) {
     p5.background(0);
 
     for (let i = 0; i < states[stateIndex].length; i++) {
-      let col = p5.color(states[stateIndex][i], p5.height, p5.height);
-      p5.stroke(col);
-      p5.fill(col);
+      p5.stroke(200);
+      sortingStateHistory[stateIndex][i] == 1
+        ? p5.fill(255, 0, 0)
+        : p5.fill(255);
       p5.rect(i * w, p5.height - states[stateIndex][i], w, p5.height);
     }
     stateIndex++;
@@ -40,6 +44,7 @@ export function main(_p5) {
 
   function merge(arr, start, mid, end) {
     let start2 = mid + 1;
+    states.push(arr.slice());
 
     // If the direct merge is already sorted
     if (arr[mid] <= arr[start2]) {
@@ -49,7 +54,8 @@ export function main(_p5) {
     // Two pointers to maintain start
     // of both arrays to merge
     while (start <= mid && start2 <= end) {
-      states.push(arr);
+      states.push(arr.slice());
+      setState(start, end);
       // If element 1 is in right place
       if (arr[start] <= arr[start2]) {
         start++;
@@ -86,6 +92,23 @@ export function main(_p5) {
       mergeSort(arr, m + 1, r);
 
       merge(arr, l, m, r);
+      unsetState(l, r);
     }
+  }
+
+  function setState(start, end) {
+    let states = sortingStateHistory[sortingStateHistory.length - 1];
+    for (let i = start; i < end; i++) {
+      states[i] = 1;
+    }
+    sortingStateHistory.push(states.slice());
+  }
+
+  function unsetState(start, end) {
+    let states = sortingStateHistory[sortingStateHistory.length - 1];
+    for (let i = start; i < end; i++) {
+      states[i] = 0;
+    }
+    sortingStateHistory.push(states.slice());
   }
 }
